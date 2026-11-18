@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fizz</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231c1c1e'/%3E%3Ccircle cx='16' cy='13' r='6' fill='%23ff453a'/%3E%3Ccircle cx='8.5' cy='21.5' r='4' fill='%23f5f5f7'/%3E%3Ccircle cx='23.5' cy='21.5' r='4' fill='%23f5f5f7'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/src/hud/hud.css" />
+  </head>
+  <body>
+    <canvas id="stage"></canvas>
+    <video id="cam" playsinline muted></video>
+
+    <div id="hud" class="hidden">
+      <div id="aura"></div>
+
+      <div id="badge"><div class="glass"><i class="orb"></i><span id="r-text"></span></div></div>
+
+      <section id="p-sys">
+        <div class="glass">
+          <i class="orb"></i>
+          <b>Fizz</b>
+          <span class="sep"></span>
+          <span class="stat"><i class="dot" id="d-hands"></i><span id="o-hands">–</span></span>
+        </div>
+        <p><span id="o-fps">–</span> fps<span id="o-quality"></span> · <span id="o-voice">–</span></p>
+      </section>
+
+      <section class="glass" id="p-lab">
+        <header><h2>Collection</h2><span id="o-bonus"></span></header>
+        <div class="big"><span id="o-count">0</span><small>of 18 molecules</small></div>
+        <div class="bar"><i id="o-bar"></i></div>
+        <div class="grid18" id="o-grid"></div>
+        <div class="row"><b>Latest</b><span id="o-last">Nothing yet</span></div>
+        <div class="upnext" id="o-next"><b>Try next</b><span id="o-next-name"></span><em id="o-next-recipe"></em></div>
+      </section>
+
+      <section class="glass off" id="p-liquid">
+        <header><h2>Liquid metal</h2><span id="l-drops">1 droplet</span></header>
+        <div class="m-title"><i class="m-swatch" id="l-swatch"></i><div><b id="l-name">Mercury</b><small id="l-sub"></small></div><span class="m-temp" id="l-temp"></span></div>
+        <div class="m-chips" id="l-chips"></div>
+        <p class="m-fact" id="l-fact"></p>
+      </section>
+
+      <section class="glass off" id="p-bubbles">
+        <header><h2>Soap bubbles</h2><span id="b-alive"></span></header>
+        <div class="big"><span id="b-popped">0</span><small>popped</small></div>
+        <div class="b-chart">
+          <canvas id="b-chart" width="432" height="56"></canvas>
+          <div class="b-marks" id="b-marks"></div>
+        </div>
+        <div class="b-axis"><span>0</span><span>film thickness, nm</span><span>1000</span></div>
+        <p class="m-fact">Each dot is a bubble's film, thinnest at the top. Its colour comes from that thickness. When a dot slides into the black on the left, that bubble is about to burst.</p>
+      </section>
+
+      <section class="glass" id="gauge">
+        <div class="g-icon">°C</div>
+        <div class="g-track">
+          <div class="g-fill" id="g-fill"></div>
+          <div class="g-marks">
+            <span style="bottom: 27.27%">0°</span>
+            <span style="bottom: 72.72%">100°</span>
+          </div>
+          <div class="g-marker" id="g-marker"><span id="g-value">25 °C</span></div>
+        </div>
+        <div class="g-phase" id="g-phase"></div>
+      </section>
+
+      <div id="warn" class="glass"><i>!</i><span id="warn-text"></span></div>
+      <div id="banner" class="glass">
+        <em id="banner-emoji">✨</em>
+        <div><small id="banner-top"></small><span id="banner-text"></span></div>
+      </div>
+
+      <div id="subtitle" class="glass"><i class="orb"></i><b id="sub-name">Vera</b><span id="sub-text"></span></div>
+
+      <section id="help" class="glass off">
+        <header><h2>How to play</h2><span>H closes this</span></header>
+        <div class="h-grid">
+          <div>
+            <h3>Molecules · A</h3>
+            <p><b>Pinch</b> an element in the dock to pull out an atom</p>
+            <p><b>Pinch and drag</b> it; touch two atoms to bond</p>
+            <p><b>Two-hand pinch</b> turns a molecule in 3D</p>
+            <p><b>Flat-hand swipe</b> through a molecule breaks it</p>
+          </div>
+          <div>
+            <h3>Liquid metal · L</h3>
+            <p><b>Pinch and pull</b> to tear off a droplet</p>
+            <p><b>Fingertip</b> pokes a dimple into it</p>
+            <p><b>Open hand</b> over ferrofluid is a magnet</p>
+            <p><b>Fast swipe</b> splashes it apart · <b>1–4</b> liquids</p>
+          </div>
+          <div>
+            <h3>Bubbles · B</h3>
+            <p><b>Pinch and hold</b> to blow, open to let go</p>
+            <p><b>Fingertip</b> pops one</p>
+            <p><b>Wave</b> to blow them along or stream new ones</p>
+          </div>
+          <div>
+            <h3>Water · W</h3>
+            <p><b>Both palms open:</b> apart is hotter, together colder</p>
+            <p><b>Pinch-drag</b> turns the chamber</p>
+          </div>
+        </div>
+        <p class="dim"><b>Mouse</b> drag = pinch · right button = rotate / magnet · double-click = break / splash · wheel = temperature · shift + wheel = depth · arrows = move your head</p>
+        <p class="dim"><b>Anywhere</b> point at a button and pinch to press it · V hold to ask Vera · M sound · Q quality · C clear</p>
+      </section>
+      <nav id="modes" class="glass">
+        <button data-mode="build" class="active"><i class="ico mol"><b></b><b></b><b></b></i><span>Molecules</span><kbd>A</kbd></button>
+        <button data-mode="liquid"><i class="ico metal"></i><span>Liquid metal</span><kbd>L</kbd></button>
+        <button data-mode="bubbles"><i class="ico bubble"></i><span>Bubbles</span><kbd>B</kbd></button>
+        <button data-mode="water"><i class="ico water"></i><span>Water</span><kbd>W</kbd></button>
+      </nav>
+
+      <div id="coach" class="glass"><i>✦</i><span id="coach-text"></span></div>
+
+      <nav id="keys" class="glass">
+        <button data-key="v" id="k-ask" class="hide"><kbd>V</kbd>Hold to ask</button>
+        <button data-key="q"><kbd>Q</kbd>Quality</button>
+        <button data-key="m"><kbd>M</kbd>Sound <i id="k-mute">on</i></button>
+        <button data-key="c"><kbd>C</kbd><span id="k-clear">Clear</span></button>
+        <button data-key="h"><kbd>H</kbd>Help</button>
+      </nav>
+    </div>
+
+    <div id="boot">
+      <div class="boot-card glass">
+        <div class="boot-icon"><i></i><i></i><i></i></div>
+        <h1>Fizz</h1>
+        <p class="boot-sub">A science playground for your hands.</p>
+        <div class="boot-actions">
+          <button id="btn-start">Start with camera</button>
+          <button id="btn-mouse" class="ghost">Use the mouse instead</button>
+        </div>
+        <pre id="boot-log"></pre>
+        <p class="boot-note">Camera frames are processed on this machine only. Nothing is uploaded.</p>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

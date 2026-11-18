@@ -1,0 +1,4 @@
+# Voice companion: speech out (Kokoro, ONNX) and speech in (Whisper). No PyTorch needed.
+kokoro-onnx>=0.4
+faster-whisper>=1.0
+av<16  # newer PyAV releases dropped an argument faster-whisper still passes

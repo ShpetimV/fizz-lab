@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.local
+
+# Generated assets (npm run setup / postinstall)
+public/mediapipe/
+
+# Voice server (npm run voice:setup / voice:samples)
+voice-server/.venv/
+voice-server/models/
+voice-server/samples/
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Test / coverage
+coverage/
+
+# Editors & OS
+.idea/
+.vscode/
+.DS_Store
